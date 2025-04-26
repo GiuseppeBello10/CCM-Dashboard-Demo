@@ -107,7 +107,7 @@ for p, rischi in rischi_paese.items():
         score, _ = calcola_score_nuovo(rischi, pesi, fattori)
         ranking.append((p, score))
 df_rank = pd.DataFrame(sorted(ranking, key=lambda x: x[1], reverse=True), columns=["Paese", "Score"])
-st.markdown("###  Classifica dei Paesi in base allo score personalizzato")
+st.markdown("###  Classifica dei Paesi in base allo score di rischio personalizzato")
 st.dataframe(df_rank)
 
 # --- Download Excel dettagliato ---
