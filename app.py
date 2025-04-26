@@ -5,7 +5,6 @@ from io import BytesIO
 
 # --- Dati dei rischi base per i Paesi (inclusa Italia) ---
 rischi_paese = {
-    "Italia": {"Politico": 30, "Economico": 35, "Culturale": 50, "Legale": 40, "Innovazione": 50},
     "India": {"Politico": 65, "Economico": 60, "Culturale": 70, "Legale": 60, "Innovazione": 30},
     "Cina": {"Politico": 60, "Economico": 55, "Culturale": 65, "Legale": 50, "Innovazione": 40},
     "Giappone": {"Politico": 20, "Economico": 25, "Culturale": 50, "Legale": 30, "Innovazione": 20},
@@ -59,7 +58,6 @@ strategia = st.selectbox(" Seleziona la strategia d'ingresso", list(fattori_stra
 
 # --- Dati dinamici ---
 rischi_target = rischi_paese[paese]
-rischi_italia = rischi_paese["Italia"]
 pesi = pesi_settore[settore]
 fattori = fattori_strategia[strategia]
 
@@ -70,9 +68,7 @@ score_target, df_dettagli = calcola_score_nuovo(rischi_target, pesi, fattori)
 fig = go.Figure()
 theta = list(rischi_target.keys()) + [list(rischi_target.keys())[0]]
 r_target = list(rischi_target.values()) + [list(rischi_target.values())[0]]
-r_italia = list(rischi_italia.values()) + [list(rischi_italia.values())[0]]
 
-fig.add_trace(go.Scatterpolar(r=r_italia, theta=theta, fill='toself', name='Italia'))
 fig.add_trace(go.Scatterpolar(r=r_target, theta=theta, fill='toself', name=paese))
 fig.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 100])), showlegend=True)
 st.markdown("###  Confronto Italia vs " + paese)
@@ -93,7 +89,7 @@ for p, rischi in rischi_paese.items():
         score, _ = calcola_score_nuovo(rischi, pesi, fattori)
         ranking.append((p, score))
 df_rank = pd.DataFrame(sorted(ranking, key=lambda x: x[1], reverse=True), columns=["Paese", "Score"])
-st.markdown("###  Classifica dei Paesi in base al rischio")
+st.markdown("###  Classifica dei Paesi in base allo score personalizzato")
 st.dataframe(df_rank)
 
 # --- Download Excel dettagliato ---
