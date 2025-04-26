@@ -50,7 +50,7 @@ def calcola_score_nuovo(rischi, pesi, fattori):
     return round(score_totale, 2), df_dettagli
 
 # --- UI Streamlit ---
-st.title(" Dashboard Rischio Internazionale - Italia vs Altri Paesi")
+st.title(" Dashboard Calcolo del Rischio Internazionale")
 
 paese = st.selectbox(" Seleziona il Paese target", [p for p in rischi_paese.keys() if p != "Italia"])
 settore = st.selectbox(" Seleziona il settore", list(pesi_settore.keys()))
@@ -65,14 +65,32 @@ fattori = fattori_strategia[strategia]
 score_target, df_dettagli = calcola_score_nuovo(rischi_target, pesi, fattori)
 
 # --- Radar Chart Comparativa ---
+# --- Radar Chart Comparativa aggiornata ---
 fig = go.Figure()
-theta = list(rischi_target.keys()) + [list(rischi_target.keys())[0]]
-r_target = list(rischi_target.values()) + [list(rischi_target.values())[0]]
+theta = ["Politico", "Economico", "Culturale", "Legale", "Innovazione"]
+theta = theta + [theta[0]]  # chiudere il radar
 
-fig.add_trace(go.Scatterpolar(r=r_target, theta=theta, fill='toself', name=paese))
-fig.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 100])), showlegend=True)
-st.markdown("###  Confronto Italia vs " + paese)
+# Ciclo su tutti i paesi
+for nome_paese, rischi in rischi_paese.items():
+    valori = list(rischi.values())
+    valori = valori + [valori[0]]  # chiudere il radar
+    fig.add_trace(go.Scatterpolar(
+        r=valori,
+        theta=theta,
+        fill='toself',
+        name=nome_paese
+    ))
+
+fig.update_layout(
+    polar=dict(
+        radialaxis=dict(visible=True, range=[0, 100])
+    ),
+    showlegend=True
+)
+
+st.markdown("### 📈 Confronto tra tutti i Paesi")
 st.plotly_chart(fig)
+
 
 # --- Bar chart dei valori finali ---
 st.markdown("###  Valori finali ponderati (per rischio)")
@@ -96,8 +114,6 @@ st.dataframe(df_rank)
 
 df_export = df_dettagli.copy()
 df_export.loc["Totale"] = df_export[["Valore Finale"]].sum()
-
-
 
 buffer = BytesIO()
 df_export.to_excel(buffer, index=True, engine='openpyxl')
