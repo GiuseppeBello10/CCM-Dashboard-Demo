@@ -28,29 +28,35 @@ fattori_strategia = {
     "Franchising / Licensing": {"Culturale": 1.1, "Legale": 0.9, "Politico": 0.9},
 }
 
-import streamlit as st
+
+# --- LOGIN 
 PASSWORD_CORRETTA = st.secrets["DASHBOARD_PASSWORD"]
 
-
-def login():
-    st.sidebar.header("Login")
-    password = st.sidebar.text_input("Inserisci la password", type="password")
-    if st.sidebar.button("Accedi"):
-        if password == PASSWORD_CORRETTA:
-            st.session_state["logged_in"] = True
-            st.experimental_rerun()
-        else:
-            st.sidebar.error("❌ Password errata")
-
-# --- Controllo accesso ---
+# Inizializzazione dello stato
 if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
+if "login_attempted" not in st.session_state:
+    st.session_state["login_attempted"] = False
 
+# Login form
+with st.sidebar:
+    st.header("🔐 Login")
+    password = st.text_input("Password", type="password")
+    if st.button("Accedi"):
+        st.session_state["login_attempted"] = True
+        if password == PASSWORD_CORRETTA:
+            st.session_state["logged_in"] = True
+        else:
+            st.session_state["logged_in"] = False
+
+# Controllo accesso
 if not st.session_state["logged_in"]:
-    login()
+    if st.session_state["login_attempted"]:
+        st.sidebar.error("❌ Password errata")
     st.stop()
 else:
-    st.sidebar.success("Accesso effettuato")
+    st.sidebar.success("✅ Accesso effettuato")
+
     
 
 # --- Nuova funzione di calcolo score aggiornato ---
