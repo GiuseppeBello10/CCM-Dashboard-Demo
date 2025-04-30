@@ -29,7 +29,7 @@ fattori_strategia = {
 }
 
 
-# --- LOGIN 
+# --- LOGIN --- #
 PASSWORD_CORRETTA = st.secrets["DASHBOARD_PASSWORD"]
 
 # Inizializzazione dello stato
@@ -38,24 +38,29 @@ if "logged_in" not in st.session_state:
 if "login_attempted" not in st.session_state:
     st.session_state["login_attempted"] = False
 
-# Login form
-with st.sidebar:
-    st.header("🔐 Login")
-    password = st.text_input("Password", type="password")
-    if st.button("Accedi"):
-        st.session_state["login_attempted"] = True
-        if password == PASSWORD_CORRETTA:
-            st.session_state["logged_in"] = True
-        else:
-            st.session_state["logged_in"] = False
-
-# Controllo accesso
+# --- SOLO SE NON LOGGATO: Mostra form di login nella sidebar ---
 if not st.session_state["logged_in"]:
-    if st.session_state["login_attempted"]:
+    with st.sidebar:
+        st.header("🔐 Login")
+        password = st.text_input("Password", type="password")
+        if st.button("Accedi"):
+            st.session_state["login_attempted"] = True
+            if password == PASSWORD_CORRETTA:
+                st.session_state["logged_in"] = True
+            else:
+                st.session_state["logged_in"] = False
+    if st.session_state["login_attempted"] and not st.session_state["logged_in"]:
         st.sidebar.error("❌ Password errata")
     st.stop()
-else:
-    st.sidebar.success("✅ Accesso effettuato")
+
+# --- SE LOGGATO: Sidebar minimal con logout ---
+with st.sidebar:
+    st.success("✅ Accesso effettuato")
+    if st.button("🔓 Logout"):
+        st.session_state["logged_in"] = False
+        st.session_state["login_attempted"] = False
+        st.experimental_rerun()
+
 
     
 
