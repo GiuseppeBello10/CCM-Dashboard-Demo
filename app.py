@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from io import BytesIO
 
+
 # --- Dati dei rischi base per i Paesi (inclusa Italia) ---
 rischi_paese = {
     "India": {"Politico": 65, "Economico": 60, "Culturale": 70, "Legale": 60, "Innovazione": 30},
@@ -32,37 +33,36 @@ fattori_strategia = {
 # --- LOGIN --- #
 PASSWORD_CORRETTA = st.secrets["DASHBOARD_PASSWORD"]
 
-# Inizializzazione dello stato
 if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
 if "login_attempted" not in st.session_state:
     st.session_state["login_attempted"] = False
 
-# --- SOLO SE NON LOGGATO: Mostra form di login nella sidebar ---
+# --- LOGIN ---
 if not st.session_state["logged_in"]:
     with st.sidebar:
+        st.image("logo3clab.png", width=180)
         st.header("🔐 Login")
         password = st.text_input("Password", type="password")
-        if st.button("Accedi"):
+        login_click = st.button("Accedi")
+        if login_click:
             st.session_state["login_attempted"] = True
             if password == PASSWORD_CORRETTA:
                 st.session_state["logged_in"] = True
+                st.experimental_rerun()
             else:
-                st.session_state["logged_in"] = False
-    if st.session_state["login_attempted"] and not st.session_state["logged_in"]:
-        st.sidebar.error("❌ Password errata")
+                st.sidebar.error("❌ Password errata")
     st.stop()
 
-# --- SE LOGGATO: Sidebar minimal con logout ---
+# --- SIDEBAR dopo il login ---
 with st.sidebar:
+    st.image("logo3clab.png", width=180)
     st.success("✅ Accesso effettuato")
     if st.button("🔓 Logout"):
         st.session_state["logged_in"] = False
         st.session_state["login_attempted"] = False
         st.experimental_rerun()
 
-
-    
 
 # --- Nuova funzione di calcolo score aggiornato ---
 def calcola_score_nuovo(rischi, pesi, fattori):
