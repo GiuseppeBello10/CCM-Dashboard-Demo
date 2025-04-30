@@ -35,26 +35,23 @@ PASSWORD_CORRETTA = st.secrets["DASHBOARD_PASSWORD"]
 
 if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
-if "login_attempted" not in st.session_state:
-    st.session_state["login_attempted"] = False
+if "password_input" not in st.session_state:
+    st.session_state["password_input"] = ""
 
-# --- LOGIN una sola volta (senza doppio clic, senza logout) ---
+# Mostra il form di login solo se non loggato
 if not st.session_state["logged_in"]:
     with st.sidebar:
         st.image("logo3clab.png", width=180)
         st.header("🔐 Login")
-        password = st.text_input("Password", type="password")
-        login_button = st.button("Accedi")
-        if login_button and password == PASSWORD_CORRETTA:
+        st.session_state["password_input"] = st.text_input("Password", type="password")
+        if st.session_state["password_input"] == PASSWORD_CORRETTA:
             st.session_state["logged_in"] = True
-        elif login_button:
-            st.session_state["login_attempted"] = True
+        elif st.session_state["password_input"] != "":
             st.error("❌ Password errata")
-    st.stop()
+    if not st.session_state["logged_in"]:
+        st.stop()
 
-# --- SIDEBAR dopo il login (solo logo)
-with st.sidebar:
-    st.image("logo3clab.png", width=180)
+
 
 
 # --- Nuova funzione di calcolo score aggiornato ---
