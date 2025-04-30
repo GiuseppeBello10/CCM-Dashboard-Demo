@@ -33,23 +33,40 @@ fattori_strategia = {
 # --- LOGIN --- #
 PASSWORD_CORRETTA = st.secrets["DASHBOARD_PASSWORD"]
 
+import streamlit as st
+
+# --- LOGIN con tasto e stato persistente ---
+PASSWORD_CORRETTA = "admin2024"
+
+# Inizializza lo stato solo una volta
 if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
-if "password_input" not in st.session_state:
-    st.session_state["password_input"] = ""
+if "login_submitted" not in st.session_state:
+    st.session_state["login_submitted"] = False
 
-# Mostra il form di login solo se non loggato
+# BLOCCO LOGIN (solo se non loggato)
 if not st.session_state["logged_in"]:
     with st.sidebar:
         st.image("logo3clab.png", width=180)
         st.header("🔐 Login")
-        st.session_state["password_input"] = st.text_input("Password", type="password")
-        if st.session_state["password_input"] == PASSWORD_CORRETTA:
-            st.session_state["logged_in"] = True
-        elif st.session_state["password_input"] != "":
-            st.error("❌ Password errata")
+        password = st.text_input("Password", type="password")
+        login_button = st.button("Accedi")
+
+        if login_button:
+            st.session_state["login_submitted"] = True
+            if password == PASSWORD_CORRETTA:
+                st.session_state["logged_in"] = True
+            else:
+                st.error("❌ Password errata")
+
+    # Se login fallito, blocco la dashboard
     if not st.session_state["logged_in"]:
         st.stop()
+
+# BLOCCO SIDEBAR post-login (solo logo)
+with st.sidebar:
+    st.image("logo3clab.png", width=180)
+
 
 
 
