@@ -38,30 +38,23 @@ if "logged_in" not in st.session_state:
 if "login_attempted" not in st.session_state:
     st.session_state["login_attempted"] = False
 
-# --- LOGIN ---
+# --- LOGIN una sola volta (senza doppio clic, senza logout) ---
 if not st.session_state["logged_in"]:
     with st.sidebar:
         st.image("logo3clab.png", width=180)
         st.header("🔐 Login")
         password = st.text_input("Password", type="password")
-        login_click = st.button("Accedi")
-        if login_click:
+        login_button = st.button("Accedi")
+        if login_button and password == PASSWORD_CORRETTA:
+            st.session_state["logged_in"] = True
+        elif login_button:
             st.session_state["login_attempted"] = True
-            if password == PASSWORD_CORRETTA:
-                st.session_state["logged_in"] = True
-                st.experimental_rerun()
-            else:
-                st.sidebar.error("❌ Password errata")
+            st.error("❌ Password errata")
     st.stop()
 
-# --- SIDEBAR dopo il login ---
+# --- SIDEBAR dopo il login (solo logo)
 with st.sidebar:
     st.image("logo3clab.png", width=180)
-    st.success("✅ Accesso effettuato")
-    if st.button("🔓 Logout"):
-        st.session_state["logged_in"] = False
-        st.session_state["login_attempted"] = False
-        st.experimental_rerun()
 
 
 # --- Nuova funzione di calcolo score aggiornato ---
