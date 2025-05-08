@@ -95,7 +95,7 @@ st.dataframe(df_rank)
 
 # --- Radar Chart Comparativa --- #
 fig = go.Figure()
-theta = ["Politico", "Economico", "Culturale", "Legale", "Innovazione"]
+theta = ["Economico", "Politico", "Culturale", "Legale", "Innovazione"]
 theta = theta + [theta[0]]  # chiudere il radar
 
 # Ciclo su tutti i paesi
