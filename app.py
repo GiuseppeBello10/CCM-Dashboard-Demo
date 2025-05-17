@@ -61,7 +61,7 @@ def calcola_score_nuovo(rischi, pesi, fattori):
     return round(score_totale, 2), df_dettagli
 
 # --- Interfaccia Streamlit --- #
-st.title(" Dashboard Calcolo del Rischio Internazionale")
+st.title("Multidimensional Risk Score del Paese")
 
 paese = st.selectbox(" Seleziona il Paese target", [p for p in rischi_paese.keys() if p != "Italia"])
 settore = st.selectbox(" Seleziona il settore", list(pesi_settore.keys()))
@@ -80,7 +80,7 @@ st.markdown("###  Valori finali ponderati (per rischio)")
 st.bar_chart(df_dettagli["Valore Finale"])
 
 # --- Score finale individuale --- #
-st.markdown("###  Score personalizzato per il Paese target")
+st.markdown("###  Multidimensional Risk Score per il Paese target")
 st.metric("Score " + paese, value=score_target)
 
 # --- Ranking dinamico aggiornato --- #
@@ -90,7 +90,7 @@ for p, rischi in rischi_paese.items():
         score, _ = calcola_score_nuovo(rischi, pesi, fattori)
         ranking.append((p, score))
 df_rank = pd.DataFrame(sorted(ranking, key=lambda x: x[1], reverse=True), columns=["Paese", "Score"])
-st.markdown("###  Classifica dei Paesi in base allo score personalizzato")
+st.markdown("###  Classifica dei Paesi in base al Multidimensional Risk Score")
 st.dataframe(df_rank)
 
 # --- Radar Chart Comparativa --- #
