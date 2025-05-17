@@ -61,7 +61,7 @@ def calcola_score_nuovo(rischi, pesi, fattori):
     return round(score_totale, 2), df_dettagli
 
 # --- Interfaccia Streamlit --- #
-st.title("Multidimensional Risk Score del Paese")
+st.title("Multidimensional Risk Score")
 
 paese = st.selectbox(" Seleziona il Paese target", [p for p in rischi_paese.keys() if p != "Italia"])
 settore = st.selectbox(" Seleziona il settore", list(pesi_settore.keys()))
