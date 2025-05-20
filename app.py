@@ -138,6 +138,7 @@ st.download_button(
 # --- Link alla repository GitHub --- #
 st.markdown("---")
 st.markdown("## 🔗 Repository GitHub del progetto")
+st.markdown(" User Guide - Techinical Guide - Credits ")
 st.markdown(
     '<a href="https://github.com/GiuseppeBello10/CCM-Dashboard-Demo" target="_blank">'
     '<button style="padding:10px 20px; font-size:16px; background-color:#4CAF50; color:white; border:none; border-radius:5px;">Vai alla Repository</button>'
