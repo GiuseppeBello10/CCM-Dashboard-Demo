@@ -1,6 +1,6 @@
 Progetto realizzato nell'ambito del corso di Cross Cultural Management Prof.ssa Bice della Piana A.A. 2024/2025
 
-Dashboard Streamlit per il Calcolo Calcolo del Multidimensional Risk Score
+Dashboard Streamlit per il Calcolo del Multidimensional Risk Score
 
 TEAM WORK :
 Alessandro Falco
